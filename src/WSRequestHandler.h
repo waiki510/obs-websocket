@@ -131,6 +131,8 @@ class WSRequestHandler {
 		RpcResponse GetAudioMonitorType(const RpcRequest&);
 		RpcResponse SetAudioMonitorType(const RpcRequest&);
 		RpcResponse TakeSourceScreenshot(const RpcRequest&);
+		RpcResponse SubscribeAudioMeter(const RpcRequest&);
+		RpcResponse UnsubscribeAudioMeter(const RpcRequest&);
 
 		RpcResponse GetSourceFilters(const RpcRequest&);
 		RpcResponse GetSourceFilterInfo(const RpcRequest&);

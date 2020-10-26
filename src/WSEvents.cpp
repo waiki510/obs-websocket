@@ -1254,6 +1254,21 @@ void WSEvents::OnSourceAudioMixersChanged(void* param, calldata_t* data) {
 }
 
 /**
+ * TODO
+ *
+ * @return {String} `sourceName` Source name
+ * @return {float} `meterValue` Meter value
+ *
+ * @api events
+ * @name SourceAudioMeterUpdate
+ * @category sources
+ * @since unreleased
+ */
+void WSEvents::OnSourceAudioMeterUpdate(void* param, const float magnitude[MAX_AUDIO_CHANNELS], const float peak[MAX_AUDIO_CHANNELS], const float input_peak[MAX_AUDIO_CHANNELS]) {
+
+}
+
+/**
  * A source has been renamed.
  *
  * @return {String} `previousName` Previous source name

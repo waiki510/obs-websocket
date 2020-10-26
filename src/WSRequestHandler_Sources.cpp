@@ -1791,3 +1791,62 @@ RpcResponse WSRequestHandler::TakeSourceScreenshot(const RpcRequest& request) {
 	obs_data_set_string(response, "sourceName", obs_source_get_name(source));
 	return request.success(response);
 }
+
+/**
+* TODO
+*
+* @param {String} `sourceName`
+* @param {int} `updateRateMs`
+* @param {Boolean} `truePeak`
+* 
+* @api requests
+* @name SubscribeAudioMeter
+* @category sources
+* @since unreleased
+*/
+RpcResponse WSRequestHandler::SubscribeAudioMeter(const RpcRequest& request)
+{
+	if (!request.hasString("sourceName")) {
+		return request.failed("missing request parameters");
+	}
+
+	const char* sourceName = obs_data_get_string(request.parameters(), "sourceName");
+	OBSSourceAutoRelease source = obs_get_source_by_name(sourceName);
+	if (!source) {
+		return request.failed("specified source doesn't exist");
+	}
+
+	int updateRateMs = obs_data_get_int(request.parameters(), "updateRateMs");
+	bool truePeak = obs_data_get_bool(request.parameters(), "truePeak");
+
+	// TODO
+
+	return request.success();
+}
+
+/**
+* TODO
+*
+* @param {String} `sourceName`
+* 
+* @api requests
+* @name UnsubscribeAudioMeter
+* @category sources
+* @since unreleased
+*/
+RpcResponse WSRequestHandler::UnsubscribeAudioMeter(const RpcRequest& request)
+{
+	if (!request.hasString("sourceName")) {
+		return request.failed("missing request parameters");
+	}
+
+	const char* sourceName = obs_data_get_string(request.parameters(), "sourceName");
+	OBSSourceAutoRelease source = obs_get_source_by_name(sourceName);
+	if (!source) {
+		return request.failed("specified source doesn't exist");
+	}
+
+	// TODO
+
+	return request.success();
+}

@@ -114,6 +114,8 @@ const QHash<QString, RpcMethodHandler> WSRequestHandler::messageMap {
 	{ "GetAudioMonitorType", &WSRequestHandler::GetAudioMonitorType },
 	{ "SetAudioMonitorType", &WSRequestHandler::SetAudioMonitorType },
 	{ "TakeSourceScreenshot", &WSRequestHandler::TakeSourceScreenshot },
+	{ "SubscribeAudioMeter", &WSRequestHandler::SubscribeAudioMeter },
+	{ "UnsubscribeAudioMeter", &WSRequestHandler::UnsubscribeAudioMeter },
 
 	{ "GetSourceFilters", &WSRequestHandler::GetSourceFilters },
 	{ "GetSourceFilterInfo", &WSRequestHandler::GetSourceFilterInfo },
