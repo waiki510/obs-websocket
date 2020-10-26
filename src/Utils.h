@@ -34,6 +34,11 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 typedef void(*PauseRecordingFunction)(bool);
 typedef bool(*RecordingPausedFunction)();
 
+typedef struct {
+	obs_volmeter_t* volMeter;
+	websocketpp::connection_hdl client;
+} AudioMeterInfo;
+
 namespace Utils {
 	bool StringInStringList(char** strings, const char* string);
 	obs_data_array_t* StringListToArray(char** strings, const char* key);
