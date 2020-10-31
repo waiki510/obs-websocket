@@ -46,7 +46,8 @@ public:
 	virtual ~WSServer();
 	void start(quint16 port, bool lockToIPv4);
 	void stop();
-	void broadcast(const RpcEvent& event);
+	void sendEvent(connection_hdl hdl, const RpcEvent& event);
+	void broadcastEvent(const RpcEvent& event);
 	QThreadPool* threadPool() {
 		return &_threadPool;
 	}

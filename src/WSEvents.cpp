@@ -237,6 +237,22 @@ void WSEvents::FrontendEventHandler(enum obs_frontend_event event, void* private
 	}
 }
 
+void WSEvents::sendUpdate(connection_hdl hdl, const char* updateType, obs_data_t* additionalFields)
+{
+	std::optional<uint64_t> streamTime;
+	if (obs_frontend_streaming_active()) {
+		streamTime = std::make_optional(getStreamingTime());
+	}
+
+	std::optional<uint64_t> recordingTime;
+	if (obs_frontend_recording_active()) {
+		recordingTime = std::make_optional(getRecordingTime());
+	}
+
+	RpcEvent event(QString(updateType), streamTime, recordingTime, additionalFields);
+	_srv->sendEvent(hdl, event);
+}
+
 void WSEvents::broadcastUpdate(const char* updateType,
 	obs_data_t* additionalFields = nullptr)
 {
@@ -251,7 +267,7 @@ void WSEvents::broadcastUpdate(const char* updateType,
 	}
 
 	RpcEvent event(QString(updateType), streamTime, recordingTime, additionalFields);
-	_srv->broadcast(event);
+	_srv->broadcastEvent(event);
 }
 
 void WSEvents::connectSourceSignals(obs_source_t* source) {

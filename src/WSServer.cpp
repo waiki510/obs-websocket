@@ -133,13 +133,40 @@ void WSServer::stop()
 	blog(LOG_INFO, "server stopped successfully");
 }
 
-void WSServer::broadcast(const RpcEvent& event)
+void WSServer::sendEvent(connection_hdl hdl, const RpcEvent& event)
 {
 	OBSRemoteProtocol protocol;
 	std::string message = protocol.encodeEvent(event);
 
 	if (GetConfig()->DebugEnabled) {
-		blog(LOG_INFO, "Update << '%s'", message.c_str());
+		blog(LOG_INFO, "Update to single client << '%s'", message.c_str());
+	}
+
+	if (GetConfig()->AuthRequired) {
+		bool authenticated = _connectionProperties[hdl]->isAuthenticated();
+		if (!authenticated) {
+			return;
+		}
+	}
+
+	websocketpp::lib::error_code errorCode;
+	_server.send(hdl, message, websocketpp::frame::opcode::text, errorCode);
+
+	if (errorCode) {
+		std::string errorCodeMessage = errorCode.message();
+		blog(LOG_INFO, "server(sendEvent): send failed: %s",
+			errorCodeMessage.c_str());
+	}
+}
+
+// TODO remove
+void WSServer::broadcastEvent(const RpcEvent& event)
+{
+	OBSRemoteProtocol protocol;
+	std::string message = protocol.encodeEvent(event);
+
+	if (GetConfig()->DebugEnabled) {
+		blog(LOG_INFO, "Broadcast Update << '%s'", message.c_str());
 	}
 
 	QMutexLocker locker(&_clMutex);
