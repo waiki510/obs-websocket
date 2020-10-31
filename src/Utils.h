@@ -31,6 +31,8 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <obs-module.h>
 #include <util/config-file.h>
 
+#include <websocketpp/server.hpp>
+
 typedef void(*PauseRecordingFunction)(bool);
 typedef bool(*RecordingPausedFunction)();
 
