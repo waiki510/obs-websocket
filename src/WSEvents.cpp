@@ -1297,7 +1297,8 @@ void WSEvents::OnSourceAudioMeterUpdate(void* param, const float magnitude[MAX_A
 	OBSDataAutoRelease fields = obs_data_create();
 	obs_data_set_array(fields, "levels", levels);
 
-	// TODO send event to subscriber
+	WSEventsPtr events = GetEventsSystem();
+	events->sendUpdate(meterInfo->client, "SourceAudioMeterUpdate", fields);
 }
 
 /**
