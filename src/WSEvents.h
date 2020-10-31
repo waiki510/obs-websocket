@@ -58,6 +58,8 @@ public:
 
 	bool HeartbeatIsActive;
 
+	static void OnSourceAudioMeterUpdate(void* param, const float magnitude[MAX_AUDIO_CHANNELS], const float peak[MAX_AUDIO_CHANNELS], const float input_peak[MAX_AUDIO_CHANNELS]);
+
 private slots:
 	void StreamStatus();
 	void Heartbeat();
@@ -128,7 +130,6 @@ private:
 	static void OnSourceAudioMixersChanged(void* param, calldata_t* data);
 	static void OnSourceAudioActivated(void* param, calldata_t* data);
 	static void OnSourceAudioDeactivated(void* param, calldata_t* data);
-	static void OnSourceAudioMeterUpdate(void* param, const float magnitude[MAX_AUDIO_CHANNELS], const float peak[MAX_AUDIO_CHANNELS], const float input_peak[MAX_AUDIO_CHANNELS]);
 
 	static void OnSourceRename(void* param, calldata_t* data);
 

@@ -1270,38 +1270,6 @@ void WSEvents::OnSourceAudioMixersChanged(void* param, calldata_t* data) {
 }
 
 /**
- * TODO
- *
- * @return {String} `sourceName` Source name
- * @return {float} `meterValue` Meter value
- *
- * @api events
- * @name SourceAudioMeterUpdate
- * @category sources
- * @since unreleased
- */
-void WSEvents::OnSourceAudioMeterUpdate(void* param, const float magnitude[MAX_AUDIO_CHANNELS], const float peak[MAX_AUDIO_CHANNELS], const float input_peak[MAX_AUDIO_CHANNELS]) {
-	AudioMeterInfo* meterInfo = reinterpret_cast<AudioMeterInfo*>(param);
-	
-	OBSDataArrayAutoRelease levels = obs_data_array_create();
-	for (size_t i = 0; i < obs_volmeter_get_nr_channels(meterInfo->volMeter); i++) {
-		OBSDataAutoRelease item = obs_data_create();
-		obs_data_set_int(item, "channel", i);
-		obs_data_set_double(item, "magnitude", magnitude[i]);
-		obs_data_set_double(item, "peak", peak[i]);
-		obs_data_set_double(item, "input_peak", input_peak[i]);
-
-		obs_data_array_push_back(levels, item);
-	}
-
-	OBSDataAutoRelease fields = obs_data_create();
-	obs_data_set_array(fields, "levels", levels);
-
-	WSEventsPtr events = GetEventsSystem();
-	events->sendUpdate(meterInfo->client, "SourceAudioMeterUpdate", fields);
-}
-
-/**
  * A source has been renamed.
  *
  * @return {String} `previousName` Previous source name
@@ -1989,6 +1957,38 @@ void WSEvents::OnBroadcastCustomMessage(QString realm, obs_data_t* data) {
 	obs_data_set_obj(broadcastData, "data", data);
 
 	broadcastUpdate("BroadcastCustomMessage", broadcastData);
+}
+
+/**
+ * TODO
+ *
+ * @return {String} `sourceName` Source name
+ * @return {float} `meterValue` Meter value
+ *
+ * @api events
+ * @name SourceAudioMeterUpdate
+ * @category sources
+ * @since unreleased
+ */
+void WSEvents::OnSourceAudioMeterUpdate(void* param, const float magnitude[MAX_AUDIO_CHANNELS], const float peak[MAX_AUDIO_CHANNELS], const float input_peak[MAX_AUDIO_CHANNELS]) {
+	AudioMeterInfo* meterInfo = reinterpret_cast<AudioMeterInfo*>(param);
+
+	OBSDataArrayAutoRelease levels = obs_data_array_create();
+	for (size_t i = 0; i < obs_volmeter_get_nr_channels(meterInfo->volMeter); i++) {
+		OBSDataAutoRelease item = obs_data_create();
+		obs_data_set_int(item, "channel", i);
+		obs_data_set_double(item, "magnitude", magnitude[i]);
+		obs_data_set_double(item, "peak", peak[i]);
+		obs_data_set_double(item, "input_peak", input_peak[i]);
+
+		obs_data_array_push_back(levels, item);
+	}
+
+	OBSDataAutoRelease fields = obs_data_create();
+	obs_data_set_array(fields, "levels", levels);
+
+	WSEventsPtr events = GetEventsSystem();
+	events->sendUpdate(meterInfo->client, "SourceAudioMeterUpdate", fields);
 }
 
 /**

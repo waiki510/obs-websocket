@@ -50,17 +50,18 @@ void ConnectionProperties::setAuthenticated(bool authenticated)
     _authenticated.store(authenticated);
 }
 
-bool ConnectionProperties::addVolMeter(obs_source_t* source)
+obs_volmeter_t* ConnectionProperties::addVolMeter(obs_source_t* source)
 {
 	QMutexLocker locker(&_volMetersMutex);
 
 	if (_volMeters.contains(source)) {
-		return false;
+		return nullptr;
 	}
 
 	obs_volmeter_t* volMeter = obs_volmeter_create(OBS_FADER_CUBIC);
+	obs_volmeter_attach_source(volMeter, source);
 	_volMeters.insert(source, volMeter);
-	return true;
+	return volMeter;
 }
 
 void ConnectionProperties::removeVolMeter(obs_source_t* source)

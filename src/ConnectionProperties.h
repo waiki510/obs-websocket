@@ -24,6 +24,11 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <QtCore/QMutex>
 #include <websocketpp/server.hpp>
 
+typedef struct {
+	obs_volmeter_t* volMeter;
+	websocketpp::connection_hdl client;
+} AudioMeterInfo;
+
 class ConnectionProperties
 {
 public:
@@ -35,7 +40,7 @@ public:
 
 	websocketpp::connection_hdl getClient();
 
-	bool addVolMeter(obs_source_t* source);
+	obs_volmeter_t* addVolMeter(obs_source_t* source);
 	void removeVolMeter(obs_source_t* source);
 	obs_volmeter_t* getVolMeter(obs_source_t* source);
 

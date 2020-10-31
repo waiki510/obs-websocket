@@ -5,8 +5,8 @@
 #include <QtGui/QImageWriter>
 
 #include "Utils.h"
-
 #include "WSRequestHandler.h"
+#include "WSEvents.h"
 
 bool isTextGDIPlusSource(const QString& sourceKind)
 {
@@ -1797,7 +1797,7 @@ RpcResponse WSRequestHandler::TakeSourceScreenshot(const RpcRequest& request) {
 *
 * @param {String} `sourceName`
 * @param {int} `updateRateMs`
-* @param {Boolean} `truePeak`
+* @param {Boolean (optional)} `truePeak`
 * 
 * @api requests
 * @name SubscribeAudioMeter
@@ -1819,7 +1819,26 @@ RpcResponse WSRequestHandler::SubscribeAudioMeter(const RpcRequest& request)
 	int updateRateMs = obs_data_get_int(request.parameters(), "updateRateMs");
 	bool truePeak = obs_data_get_bool(request.parameters(), "truePeak");
 
-	// TODO
+	// try to update and existing volmeter, otherwise create it
+	bool isNewVolMeter = false;
+	obs_volmeter_t* volMeter = _connProperties->getVolMeter(source);
+	if (!volMeter) {
+		volMeter = _connProperties->addVolMeter(source);
+		if (!volMeter) {
+			return request.failed("something went badly wrong when trying to create the volume meter");
+		}
+		isNewVolMeter = true;
+	}
+
+	obs_volmeter_set_update_interval(volMeter, (unsigned int)updateRateMs);
+
+	if (truePeak) {
+		obs_volmeter_set_peak_meter_type(volMeter, obs_peak_meter_type::TRUE_PEAK_METER);
+	}
+
+	if (isNewVolMeter) {
+		obs_volmeter_add_callback(volMeter, &WSEvents::OnSourceAudioMeterUpdate, nullptr);
+	}
 
 	return request.success();
 }
@@ -1846,7 +1865,7 @@ RpcResponse WSRequestHandler::UnsubscribeAudioMeter(const RpcRequest& request)
 		return request.failed("specified source doesn't exist");
 	}
 
-	// TODO
+	_connProperties->removeVolMeter(source);
 
 	return request.success();
 }
