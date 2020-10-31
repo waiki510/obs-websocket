@@ -26,6 +26,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 
 typedef struct {
 	obs_volmeter_t* volMeter;
+	obs_source_t* source;
 	websocketpp::connection_hdl client;
 } AudioMeterInfo;
 

@@ -1837,6 +1837,7 @@ RpcResponse WSRequestHandler::SubscribeAudioMeter(const RpcRequest& request)
 	}
 
 	if (isNewVolMeter) {
+		// TODO private param
 		obs_volmeter_add_callback(volMeter, &WSEvents::OnSourceAudioMeterUpdate, nullptr);
 	}
 

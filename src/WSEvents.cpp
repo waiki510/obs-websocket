@@ -1963,7 +1963,6 @@ void WSEvents::OnBroadcastCustomMessage(QString realm, obs_data_t* data) {
  * TODO
  *
  * @return {String} `sourceName` Source name
- * @return {float} `meterValue` Meter value
  *
  * @api events
  * @name SourceAudioMeterUpdate
@@ -1985,6 +1984,7 @@ void WSEvents::OnSourceAudioMeterUpdate(void* param, const float magnitude[MAX_A
 	}
 
 	OBSDataAutoRelease fields = obs_data_create();
+	obs_data_set_string(fields, "sourceName", obs_source_get_name(meterInfo->source));
 	obs_data_set_array(fields, "levels", levels);
 
 	WSEventsPtr events = GetEventsSystem();
