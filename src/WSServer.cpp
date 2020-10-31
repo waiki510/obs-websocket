@@ -145,7 +145,7 @@ void WSServer::broadcast(const RpcEvent& event)
 	QMutexLocker locker(&_clMutex);
 	for (connection_hdl hdl : _connections) {
 		if (GetConfig()->AuthRequired) {
-			bool authenticated = _connectionProperties[hdl].isAuthenticated();
+			bool authenticated = _connectionProperties[hdl]->isAuthenticated();
 			if (!authenticated) {
 				continue;
 			}
@@ -166,6 +166,7 @@ void WSServer::onOpen(connection_hdl hdl)
 {
 	QMutexLocker locker(&_clMutex);
 	_connections.insert(hdl);
+	_connectionProperties[hdl] = std::make_shared<ConnectionProperties>(hdl);
 	locker.unlock();
 
 	QString clientIp = getRemoteEndpoint(hdl);
@@ -184,7 +185,7 @@ void WSServer::onMessage(connection_hdl hdl, server::message_ptr message)
 		std::string payload = message->get_payload();
 
 		QMutexLocker locker(&_clMutex);
-		ConnectionProperties& connProperties = _connectionProperties[hdl];
+		std::shared_ptr<ConnectionProperties> connProperties = _connectionProperties[hdl];
 		locker.unlock();
 
 		if (GetConfig()->DebugEnabled) {

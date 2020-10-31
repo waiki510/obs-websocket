@@ -18,7 +18,8 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 
 #include "ConnectionProperties.h"
 
-ConnectionProperties::ConnectionProperties() :
+ConnectionProperties::ConnectionProperties(websocketpp::connection_hdl client) :
+	_client(),
 	_authenticated(false),
 	_volMeters(),
 	_volMetersMutex(QMutex::Recursive)
@@ -28,11 +29,15 @@ ConnectionProperties::ConnectionProperties() :
 ConnectionProperties::~ConnectionProperties()
 {
 	QMutexLocker locker(&_volMetersMutex);
-
 	for (auto volMeter : _volMeters.values()) {
 		obs_volmeter_destroy(volMeter);
 	}
 	_volMeters.clear();
+}
+
+websocketpp::connection_hdl ConnectionProperties::getClient()
+{
+	return _client;
 }
 
 bool ConnectionProperties::isAuthenticated()

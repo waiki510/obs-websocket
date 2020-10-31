@@ -64,7 +64,7 @@ private:
 	quint16 _serverPort;
 	bool _lockToIPv4;
 	std::set<connection_hdl, std::owner_less<connection_hdl>> _connections;
-	std::map<connection_hdl, ConnectionProperties, std::owner_less<connection_hdl>> _connectionProperties;
+	std::map<connection_hdl, std::shared_ptr<ConnectionProperties>, std::owner_less<connection_hdl>> _connectionProperties;
 	QMutex _clMutex;
 	QThreadPool _threadPool;
 };

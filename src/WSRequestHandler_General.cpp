@@ -145,7 +145,7 @@ RpcResponse WSRequestHandler::Authenticate(const RpcRequest& request) {
 		return request.failed("missing request parameters");
 	}
 
-	if (_connProperties.isAuthenticated()) {
+	if (_connProperties->isAuthenticated()) {
 		return request.failed("already authenticated");
 	}
 
@@ -158,7 +158,7 @@ RpcResponse WSRequestHandler::Authenticate(const RpcRequest& request) {
 		return request.failed("Authentication Failed.");
 	}
 
-	_connProperties.setAuthenticated(true);
+	_connProperties->setAuthenticated(true);
 	return request.success();
 }
 

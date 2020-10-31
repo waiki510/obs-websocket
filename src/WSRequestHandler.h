@@ -38,11 +38,11 @@ typedef RpcResponse(WSRequestHandler::*RpcMethodHandler)(const RpcRequest&);
 
 class WSRequestHandler {
 	public:
-		explicit WSRequestHandler(ConnectionProperties& connProperties);
+		explicit WSRequestHandler(std::shared_ptr<ConnectionProperties> connProperties);
 		RpcResponse processRequest(const RpcRequest& textMessage);
 
 	private:
-		ConnectionProperties& _connProperties;
+		std::shared_ptr<ConnectionProperties> _connProperties;
 
 		static const QHash<QString, RpcMethodHandler> messageMap;
 		static const QSet<QString> authNotRequired;

@@ -182,7 +182,7 @@ const QSet<QString> WSRequestHandler::authNotRequired {
 	"Authenticate"
 };
 
-WSRequestHandler::WSRequestHandler(ConnectionProperties& connProperties) :
+WSRequestHandler::WSRequestHandler(std::shared_ptr<ConnectionProperties> connProperties) :
 	_connProperties(connProperties)
 {
 }
@@ -190,7 +190,7 @@ WSRequestHandler::WSRequestHandler(ConnectionProperties& connProperties) :
 RpcResponse WSRequestHandler::processRequest(const RpcRequest& request){
 	if (GetConfig()->AuthRequired
 		&& (!authNotRequired.contains(request.methodName()))
-		&& (!_connProperties.isAuthenticated()))
+		&& (!_connProperties->isAuthenticated()))
 	{
 		return RpcResponse::fail(request, "Not Authenticated");
 	}

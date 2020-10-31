@@ -22,21 +22,25 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <obs-audio-controls.h>
 #include <QtCore/QHash>
 #include <QtCore/QMutex>
+#include <websocketpp/server.hpp>
 
 class ConnectionProperties
 {
 public:
-    explicit ConnectionProperties();
+    explicit ConnectionProperties(websocketpp::connection_hdl client);
 	~ConnectionProperties();
 
 	bool isAuthenticated();
     void setAuthenticated(bool authenticated);
+
+	websocketpp::connection_hdl getClient();
 
 	bool addVolMeter(obs_source_t* source);
 	void removeVolMeter(obs_source_t* source);
 	obs_volmeter_t* getVolMeter(obs_source_t* source);
 
 private:
+	websocketpp::connection_hdl _client;
     std::atomic<bool> _authenticated;
 	QHash<obs_source_t*, obs_volmeter_t*> _volMeters;
 	QMutex _volMetersMutex;
