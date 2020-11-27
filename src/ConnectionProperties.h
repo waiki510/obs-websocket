@@ -41,13 +41,13 @@ public:
 
 	websocketpp::connection_hdl getClient();
 
-	obs_volmeter_t* addVolMeter(obs_source_t* source);
+	AudioMeterInfo* addVolMeter(obs_source_t* source);
 	void removeVolMeter(obs_source_t* source);
-	obs_volmeter_t* getVolMeter(obs_source_t* source);
+	AudioMeterInfo* getVolMeter(obs_source_t* source);
 
 private:
 	websocketpp::connection_hdl _client;
     std::atomic<bool> _authenticated;
-	QHash<obs_source_t*, obs_volmeter_t*> _volMeters;
+	QHash<obs_source_t*, AudioMeterInfo*> _meters;
 	QMutex _volMetersMutex;
 };

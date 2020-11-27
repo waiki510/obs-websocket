@@ -50,7 +50,7 @@ void ConnectionProperties::setAuthenticated(bool authenticated)
     _authenticated.store(authenticated);
 }
 
-obs_volmeter_t* ConnectionProperties::addVolMeter(obs_source_t* source)
+AudioMeterInfo* ConnectionProperties::addVolMeter(obs_source_t* source)
 {
 	QMutexLocker locker(&_volMetersMutex);
 
@@ -66,11 +66,13 @@ obs_volmeter_t* ConnectionProperties::addVolMeter(obs_source_t* source)
 
 void ConnectionProperties::removeVolMeter(obs_source_t* source)
 {
-	obs_volmeter_t* volMeter = _volMeters.take(source);
-	obs_volmeter_destroy(volMeter);
+	AudioMeterInfo* meterInfo = _volMeters.take(source);
+	if (meterInfo) {
+		obs_volmeter_destroy(volMeter);
+	}
 }
 
-obs_volmeter_t* ConnectionProperties::getVolMeter(obs_source_t* source)
+AudioMeterInfo* ConnectionProperties::getVolMeter(obs_source_t* source)
 {
 	return _volMeters.value(source);
 }
