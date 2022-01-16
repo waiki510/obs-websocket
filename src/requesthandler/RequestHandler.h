@@ -46,6 +46,7 @@ class RequestHandler {
 		// General
 		RequestResult GetVersion(const Request&);
 		RequestResult GetStats(const Request&);
+		RequestResult GetMonitorList(const Request&);
 		RequestResult BroadcastCustomEvent(const Request&);
 		RequestResult CallVendorRequest(const Request&);
 		RequestResult GetHotkeyList(const Request&);

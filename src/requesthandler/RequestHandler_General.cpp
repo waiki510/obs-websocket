@@ -18,6 +18,10 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
 #include <QImageWriter>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QRect>
+#include <sstream>
 
 #include "RequestHandler.h"
 #include "../websocketserver/WebSocketServer.h"
@@ -89,6 +93,42 @@ RequestResult RequestHandler::GetStats(const Request&)
 	responseData["webSocketSessionIncomingMessages"] = _session->IncomingMessages();
 	responseData["webSocketSessionOutgoingMessages"] = _session->OutgoingMessages();
 
+	return RequestResult::Success(responseData);
+}
+
+/**
+ * Gets a list of connected monitors and information about them.
+ *
+ * @responseField monitors | Array<Object> | a list of detected monitors with some information
+ *
+ * @requestType GetMonitorList
+ * @complexity 2
+ * @rpcVersion -1
+ * @initialVersion 5.0.0
+ * @category general
+ * @api requests
+ */
+RequestResult RequestHandler::GetMonitorList(const Request&)
+{
+	json responseData = json::object();
+	json monitorsData = json::array();
+	QList<QScreen *> screensList = QGuiApplication::screens();
+	for (int screenIndex = 0; screenIndex < screensList.size(); screenIndex++)
+	{
+		json screenData = json::object();
+		QScreen const* screen = screensList[screenIndex];
+		std::stringstream nameAndIndex;
+		nameAndIndex << screen->name().toStdString();
+		nameAndIndex << '(' << screenIndex << ')';
+		screenData["name"] = nameAndIndex.str();
+		const QRect screenGeometry = screen->geometry();
+		screenData["width"] = screenGeometry.width();
+		screenData["height"] = screenGeometry.height();
+		screenData["x"] = screenGeometry.x();
+		screenData["y"] = screenGeometry.y();
+		monitorsData.push_back(screenData);
+	}
+	responseData["monitors"] = monitorsData;
 	return RequestResult::Success(responseData);
 }
 

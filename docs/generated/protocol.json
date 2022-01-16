@@ -1283,6 +1283,23 @@
       ]
     },
     {
+      "description": "Gets a list of connected monitors and information about them.",
+      "requestType": "GetMonitorList",
+      "complexity": 2,
+      "rpcVersion": "1",
+      "deprecated": false,
+      "initialVersion": "5.0.0",
+      "category": "general",
+      "requestFields": [],
+      "responseFields": [
+        {
+          "valueName": "monitors",
+          "valueType": "Array<Object>",
+          "valueDescription": "a list of detected monitors with some information"
+        }
+      ]
+    },
+    {
       "description": "Broadcasts a `CustomEvent` to all WebSocket clients. Receivers are clients which are identified and subscribed.",
       "requestType": "BroadcastCustomEvent",
       "complexity": 1,

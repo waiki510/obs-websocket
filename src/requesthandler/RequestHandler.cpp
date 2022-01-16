@@ -28,6 +28,7 @@ const std::unordered_map<std::string, RequestMethodHandler> RequestHandler::_han
 	// General
 	{"GetVersion", &RequestHandler::GetVersion},
 	{"GetStats", &RequestHandler::GetStats},
+	{"GetMonitorList", &RequestHandler::GetMonitorList},
 	{"BroadcastCustomEvent", &RequestHandler::BroadcastCustomEvent},
 	{"CallVendorRequest", &RequestHandler::CallVendorRequest},
 	{"GetHotkeyList", &RequestHandler::GetHotkeyList},

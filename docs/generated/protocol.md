@@ -2036,6 +2036,7 @@ Studio mode has been enabled or disabled.
 - [General](#general-1)
   - [GetVersion](#getversion)
   - [GetStats](#getstats)
+  - [GetMonitorList](#getmonitorlist)
   - [BroadcastCustomEvent](#broadcastcustomevent)
   - [CallVendorRequest](#callvendorrequest)
   - [GetHotkeyList](#gethotkeylist)
@@ -2200,6 +2201,23 @@ Gets statistics about OBS, obs-websocket, and the current session.
 | outputTotalFrames | Number | Total number of frames outputted by the output thread |
 | webSocketSessionIncomingMessages | Number | Total number of messages received by obs-websocket from the client |
 | webSocketSessionOutgoingMessages | Number | Total number of messages sent by obs-websocket to the client |
+
+---
+
+### GetMonitorList
+
+Gets a list of connected monitors and information about them.
+
+- Complexity Rating: `2/5`
+- Latest Supported RPC Version: `1`
+- Added in v5.0.0
+
+
+**Response Fields:**
+
+| Name | Type  | Description |
+| ---- | :---: | ----------- |
+| monitors | Array&lt;Object&gt; | a list of detected monitors with some information |
 
 ---
 
