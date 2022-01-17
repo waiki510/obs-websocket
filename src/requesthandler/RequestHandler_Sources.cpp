@@ -184,7 +184,7 @@ RequestResult RequestHandler::GetSourceScreenshot(const Request& request)
 
 	uint32_t requestedWidth{0};
 	uint32_t requestedHeight{0};
-	int compressionQuality{-1};
+	int64_t compressionQuality{-1};
 
 	if (request.Contains("imageWidth")) {
 		if (!request.ValidateOptionalNumber("imageWidth", statusCode, comment, 8, 4096))
@@ -204,7 +204,7 @@ RequestResult RequestHandler::GetSourceScreenshot(const Request& request)
 		if (!request.ValidateOptionalNumber("imageCompressionQuality", statusCode, comment, -1, 100))
 			return RequestResult::Error(statusCode, comment);
 
-		compressionQuality = request.RequestData["imageCompressionQuality"];
+		request.RequestData["imageCompressionQuality"].get_to(compressionQuality);
 	}
 
 	bool success;
@@ -276,7 +276,7 @@ RequestResult RequestHandler::SaveSourceScreenshot(const Request& request)
 
 	uint32_t requestedWidth{0};
 	uint32_t requestedHeight{0};
-	int compressionQuality{-1};
+	int64_t compressionQuality{-1};
 
 	if (request.Contains("imageWidth")) {
 		if (!request.ValidateOptionalNumber("imageWidth", statusCode, comment, 8, 4096))
@@ -296,7 +296,7 @@ RequestResult RequestHandler::SaveSourceScreenshot(const Request& request)
 		if (!request.ValidateOptionalNumber("imageCompressionQuality", statusCode, comment, -1, 100))
 			return RequestResult::Error(statusCode, comment);
 
-		compressionQuality = request.RequestData["imageCompressionQuality"];
+		request.RequestData["imageCompressionQuality"].get_to(compressionQuality);
 	}
 
 	bool success;
@@ -346,5 +346,73 @@ RequestResult RequestHandler::SetSourcePrivateSettings(const Request& request)
 	// Always overlays to prevent destroying internal source data unintentionally
 	obs_data_apply(privateSettings, newSettings);
 
+	return RequestResult::Success();
+}
+
+RequestResult RequestHandler::SendSourceMouseClick(const Request& request)
+{
+	static const std::unordered_set<std::string> validClickTypes = {"LEFT", "RIGHT", "MIDDLE"};
+	RequestStatus::RequestStatus statusCode;
+	std::string comment{""};
+	std::string clickTypeStr{""};
+	double x = 0, y = 0, clickCount = 0, modifierFlags = 0;
+	bool mouseUp = false;
+	int32_t clickType = 0;
+
+	OBSSourceAutoRelease source = request.ValidateSource("sourceName", statusCode, comment);
+	if (!source)
+	{
+		return RequestResult::Error(statusCode, comment);
+	}
+	if (!request.ValidateNumber("modifierFlags", statusCode, comment, 0))
+	{
+		return RequestResult::Error(statusCode, comment);
+	}
+	request.RequestData["modifierFlags"].get_to(modifierFlags);
+	if (!(request.ValidateNumber("x", statusCode, comment) && request.ValidateNumber("y", statusCode, comment)))
+	{
+		return RequestResult::Error(statusCode, comment);
+	}
+	request.RequestData["x"].get_to(x);
+	request.RequestData["y"].get_to(y);
+	if (!request.ValidateStringOneOf("clickType", statusCode, comment, validClickTypes))
+	{
+		return RequestResult::Error(statusCode, comment);
+	}
+	request.RequestData["clickType"].get_to(clickTypeStr);
+	if (clickTypeStr.compare("LEFT") == 0)
+	{
+		clickType = MOUSE_LEFT;
+	} 
+	else if (clickTypeStr.compare("MIDDLE") == 0)
+	{
+		clickType = MOUSE_MIDDLE;
+	}
+	else 
+	{
+		clickType = MOUSE_RIGHT;
+	}
+	if (!request.ValidateBoolean("mouseUp", statusCode, comment))
+	{
+		return RequestResult::Error(statusCode, comment);
+	}
+	request.RequestData["mouseUp"].get_to(mouseUp);
+	if (!request.ValidateNumber("clickCount", statusCode, comment, 1))
+	{
+		return RequestResult::Error(statusCode, comment);
+	}
+	request.RequestData["clickCount"].get_to(clickCount);
+	obs_mouse_event event = {
+		static_cast<uint32_t>(modifierFlags),
+		static_cast<int32_t>(x),
+		static_cast<int32_t>(y)
+	};
+	obs_source_send_mouse_click(
+		source,
+		&event,
+		clickType,
+		mouseUp,
+		clickCount
+	);
 	return RequestResult::Success();
 }

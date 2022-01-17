@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License along
 with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
+#include <sstream>
+
 #include "Request.h"
 #include "../../obs-websocket.h"
 
@@ -118,6 +120,27 @@ bool Request::ValidateString(const std::string &keyName, RequestStatus::RequestS
 	if (!ValidateOptionalString(keyName, statusCode, comment, allowEmpty))
 		return false;
 
+	return true;
+}
+
+bool Request::ValidateStringOneOf(const std::string &keyName, RequestStatus::RequestStatus &statusCode, std::string &comment, std::unordered_set<std::string> options) const
+{
+	if (!ValidateString(keyName, statusCode, comment, false))
+	{
+		return false;
+	}
+	if (options.count(keyName) <= 0)
+	{
+		std::stringstream commentBuilder;
+		commentBuilder << "The field value of `" << keyName << "` must be one of {";
+		for (const auto& option : options)
+		{
+			commentBuilder << option << ',';
+		}
+		commentBuilder << '}';
+		comment = commentBuilder.str();
+		return false;
+	}
 	return true;
 }
 
