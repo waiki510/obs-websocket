@@ -76,6 +76,7 @@ class RequestHandler {
 		RequestResult SaveSourceScreenshot(const Request&);
 		RequestResult GetSourcePrivateSettings(const Request&);
 		RequestResult SetSourcePrivateSettings(const Request&);
+		RequestResult SendSourceMouseClick(const Request&);
 
 		// Scenes
 		RequestResult GetSceneList(const Request&);
@@ -184,6 +185,7 @@ class RequestHandler {
 		RequestResult OpenInputPropertiesDialog(const Request&);
 		RequestResult OpenInputFiltersDialog(const Request&);
 		RequestResult OpenInputInteractDialog(const Request&);
+		RequestResult GetMonitorList(const Request&);
 
 		SessionPtr _session;
 		static const std::unordered_map<std::string, RequestMethodHandler> _handlerMap;

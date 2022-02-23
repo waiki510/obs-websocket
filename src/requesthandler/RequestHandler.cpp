@@ -28,6 +28,7 @@ const std::unordered_map<std::string, RequestMethodHandler> RequestHandler::_han
 	// General
 	{"GetVersion", &RequestHandler::GetVersion},
 	{"GetStats", &RequestHandler::GetStats},
+	{"GetMonitorList", &RequestHandler::GetMonitorList},
 	{"BroadcastCustomEvent", &RequestHandler::BroadcastCustomEvent},
 	{"CallVendorRequest", &RequestHandler::CallVendorRequest},
 	{"GetHotkeyList", &RequestHandler::GetHotkeyList},
@@ -58,6 +59,7 @@ const std::unordered_map<std::string, RequestMethodHandler> RequestHandler::_han
 	{"SaveSourceScreenshot", &RequestHandler::SaveSourceScreenshot},
 	{"GetSourcePrivateSettings", &RequestHandler::GetSourcePrivateSettings},
 	{"SetSourcePrivateSettings", &RequestHandler::SetSourcePrivateSettings},
+	{"SendSourceMouseClick", &RequestHandler::SendSourceMouseClick},
 
 	// Scenes
 	{"GetSceneList", &RequestHandler::GetSceneList},
