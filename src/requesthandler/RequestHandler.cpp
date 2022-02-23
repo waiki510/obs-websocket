@@ -59,6 +59,7 @@ const std::unordered_map<std::string, RequestMethodHandler> RequestHandler::_han
 	{"SaveSourceScreenshot", &RequestHandler::SaveSourceScreenshot},
 	{"GetSourcePrivateSettings", &RequestHandler::GetSourcePrivateSettings},
 	{"SetSourcePrivateSettings", &RequestHandler::SetSourcePrivateSettings},
+	{"SendSourceMouseClick", &RequestHandler::SendSourceMouseClick},
 
 	// Scenes
 	{"GetSceneList", &RequestHandler::GetSceneList},

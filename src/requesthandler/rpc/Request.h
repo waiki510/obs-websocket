@@ -19,6 +19,8 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 
 #pragma once
 
+#include <unordered_set>
+
 #include "../types/RequestStatus.h"
 #include "../types/RequestBatchExecutionType.h"
 #include "../../utils/Json.h"
@@ -47,6 +49,7 @@ struct Request
 	bool ValidateNumber(const std::string &keyName, RequestStatus::RequestStatus &statusCode, std::string &comment, const double minValue = -INFINITY, const double maxValue = INFINITY) const;
 	bool ValidateOptionalString(const std::string &keyName, RequestStatus::RequestStatus &statusCode, std::string &comment, const bool allowEmpty = false) const;
 	bool ValidateString(const std::string &keyName, RequestStatus::RequestStatus &statusCode, std::string &comment, const bool allowEmpty = false) const;
+	bool ValidateStringOneOf(const std::string &keyName, RequestStatus::RequestStatus &statusCode, std::string &comment, std::unordered_set<std::string> options) const;
 	bool ValidateOptionalBoolean(const std::string &keyName, RequestStatus::RequestStatus &statusCode, std::string &comment) const;
 	bool ValidateBoolean(const std::string &keyName, RequestStatus::RequestStatus &statusCode, std::string &comment) const;
 	bool ValidateOptionalObject(const std::string &keyName, RequestStatus::RequestStatus &statusCode, std::string &comment, const bool allowEmpty = false) const;

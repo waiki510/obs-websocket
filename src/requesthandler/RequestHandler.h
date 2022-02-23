@@ -76,6 +76,7 @@ class RequestHandler {
 		RequestResult SaveSourceScreenshot(const Request&);
 		RequestResult GetSourcePrivateSettings(const Request&);
 		RequestResult SetSourcePrivateSettings(const Request&);
+		RequestResult SendSourceMouseClick(const Request&);
 
 		// Scenes
 		RequestResult GetSceneList(const Request&);
